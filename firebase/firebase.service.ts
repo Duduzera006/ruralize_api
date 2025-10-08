@@ -1,5 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import { Auth } from 'firebase-admin/auth';
+import { Firestore } from 'firebase-admin/firestore';
 
 @Injectable()
 export class FirebaseService implements OnModuleInit {
@@ -21,11 +23,11 @@ export class FirebaseService implements OnModuleInit {
     this.auth = admin.auth();
   }
 
-  getFirestore() {
+  getFirestore(): Firestore {
     return this.db;
   }
 
-  getAuth() {
+  getAuth(): Auth {
     return this.auth;
   }
 }

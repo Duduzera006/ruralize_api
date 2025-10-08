@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { FirebaseService } from '../../firebase/firebase.service.js';
 import { SignUpDto } from './dto/signup.dto.js';
 import * as admin from 'firebase-admin';
@@ -7,11 +7,13 @@ import { CollectionReference, Firestore } from 'firebase-admin/firestore';
 import { Auth } from 'firebase-admin/auth';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit {
   private usersCollection: CollectionReference;
   private db: Firestore;
   private auth: Auth;
-  constructor(private readonly firebaseService: FirebaseService) {
+  constructor(private readonly firebaseService: FirebaseService) {}
+
+  onModuleInit() {
     this.auth = this.firebaseService.getAuth();
     this.db = this.firebaseService.getFirestore();
     this.usersCollection = this.db.collection('users');
@@ -42,12 +44,15 @@ export class AuthService {
         password: dto.password,
       });
 
-      await this.usersCollection.doc(dto.uid).set({
-        email: dto.email,
-        displayName: dto.displayName,
-        cnpj: dto.cnpj,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-      });
+      await this.usersCollection.doc(dto.uid).set(
+        {
+          email: dto.email,
+          displayName: dto.displayName,
+          cnpj: dto.cnpj,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        },
+        { merge: true },
+      );
 
       return {
         message: 'Usuário atualizado com sucesso',

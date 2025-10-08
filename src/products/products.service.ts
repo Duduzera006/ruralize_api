@@ -1,15 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { FirebaseService } from '../../firebase/firebase.service.js';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CollectionReference, DocumentData, Firestore, UpdateData } from 'firebase-admin/firestore';
 
 @Injectable()
-export class ProductsService {
+export class ProductsService implements OnModuleInit {
   private productsCollection: CollectionReference;
   private db: Firestore;
 
-  constructor(private readonly firebaseService: FirebaseService) {
+  constructor(private readonly firebaseService: FirebaseService) {}
+
+  onModuleInit() {
     this.db = this.firebaseService.getFirestore();
     this.productsCollection = this.db.collection('products');
   }
