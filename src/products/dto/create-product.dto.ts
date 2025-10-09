@@ -34,4 +34,7 @@ export class CreateProductDto {
 
   @IsString()
   categoria: string;
+
+  @IsString()
+  ownerId: string;
 }
