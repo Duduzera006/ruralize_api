@@ -42,20 +42,30 @@ export class ProductsService implements OnModuleInit {
     return { id: doc.id, ...doc.data() };
   }
 
-  async update(id: string, dto: UpdateProductDto) {
-    const docRef = this.productsCollection.doc(id);
-    const doc = await docRef.get();
-    if (!doc.exists) throw new NotFoundException('Produto não encontrado');
+  async update(ownerId: string, dto: UpdateProductDto) {
+    const querySnapshot = await this.productsCollection
+      .where('ownerId', '==', ownerId)
+      .limit(1)
+      .get();
 
+    if (querySnapshot.empty) {
+      throw new NotFoundException('Produto não encontrado para este ownerId');
+    }
+
+    const docRef = querySnapshot.docs[0].ref;
     await docRef.update(dto as UpdateData<DocumentData>);
+
     const updatedDoc = await docRef.get();
     return { id: updatedDoc.id, ...updatedDoc.data() };
   }
 
   async remove(id: string) {
-    const docRef = this.productsCollection.doc(id);
-    const doc = await docRef.get();
-    if (!doc.exists) throw new NotFoundException('Produto não encontrado');
+    const querySnapshot = await this.productsCollection.where('ownerId', '==', id).limit(1).get();
+
+    if (querySnapshot.empty) {
+      throw new NotFoundException('Produto não encontrado para este ownerId');
+    }
+    const docRef = querySnapshot.docs[0].ref;
 
     await docRef.delete();
     return { message: 'Produto removido com sucesso' };
