@@ -20,11 +20,7 @@ export class AuthService implements OnModuleInit {
   }
 
   async signUp(dto: SignUpDto) {
-    const userRecord = await this.auth.createUser({
-      email: dto.email,
-      password: dto.password,
-      displayName: dto.displayName,
-    });
+    const userRecord = await this.auth.getUserByEmail(dto.email);
 
     await this.usersCollection.doc(userRecord.uid).set({
       email: dto.email,
