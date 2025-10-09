@@ -19,6 +19,19 @@ export class AuthService implements OnModuleInit {
     this.usersCollection = this.db.collection('users');
   }
 
+  async getUserById(uid: string) {
+    const userDoc = await this.usersCollection.doc(uid).get();
+
+    if (!userDoc.exists) {
+      throw new NotFoundException(`Usuário com ID ${uid} não encontrado`);
+    }
+
+    return {
+      id: userDoc.id,
+      ...userDoc.data(),
+    };
+  }
+
   async signUp(dto: SignUpDto) {
     const userRecord = await this.auth.getUserByEmail(dto.email);
 
