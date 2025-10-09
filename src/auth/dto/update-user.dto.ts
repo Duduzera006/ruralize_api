@@ -20,5 +20,5 @@ export class UpdateUserDto {
   @IsOptional()
   @MinLength(6)
   @isValidCnpj()
-  cnpj: string;
+  cnpj?: string;
 }

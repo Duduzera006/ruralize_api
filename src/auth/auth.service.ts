@@ -72,6 +72,21 @@ export class AuthService implements OnModuleInit {
     }
   }
 
+  async updateUserPassword(dto: UpdateUserDto) {
+    try {
+      const updatedUser = await this.auth.updateUser(dto.uid, {
+        password: dto.password,
+      });
+
+      return {
+        message: 'Senha atualizada com sucesso',
+        user: updatedUser,
+      };
+    } catch (error) {
+      throw new NotFoundException('Usuário não encontrado ou erro na atualização' + error);
+    }
+  }
+
   async deleteUser(uid: string) {
     await this.auth.deleteUser(uid);
     await this.usersCollection.doc(uid).delete();

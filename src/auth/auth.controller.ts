@@ -22,6 +22,11 @@ export class AuthController {
     return this.authService.updateUser(dto);
   }
 
+  @Patch('updatePassword')
+  updateUserPassword(@Body() dto: UpdateUserDto) {
+    return this.authService.updateUserPassword(dto);
+  }
+
   @Delete('/delete/:uid')
   delete(@Param('uid') uid: string) {
     return this.authService.deleteUser(uid);
