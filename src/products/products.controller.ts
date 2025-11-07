@@ -12,23 +12,27 @@ export class ProductsController {
     return this.productsService.create(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.productsService.findAll();
+  @Get(':empresaId')
+  findAll(@Param('empresaId') empresaId: string) {
+    return this.productsService.findAll(empresaId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(id);
+  @Get(':empresaId/:produtoId')
+  findOne(@Param('empresaId') empresaId: string, @Param('produtoId') produtoId: string) {
+    return this.productsService.findOne(empresaId, produtoId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
-    return this.productsService.update(id, dto);
+  @Patch(':empresaId/:produtoId')
+  update(
+    @Param('empresaId') empresaId: string,
+    @Param('produtoId') produtoId: string,
+    @Body() dto: UpdateProductDto,
+  ) {
+    return this.productsService.update(empresaId, produtoId, dto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(id);
+  @Delete(':empresaId/:produtoId')
+  remove(@Param('empresaId') empresaId: string, @Param('produtoId') produtoId: string) {
+    return this.productsService.remove(empresaId, produtoId);
   }
 }

@@ -6,66 +6,72 @@ import { CollectionReference, DocumentData, Firestore, UpdateData } from 'fireba
 
 @Injectable()
 export class ProductsService implements OnModuleInit {
-  private productsCollection: CollectionReference;
   private db: Firestore;
+  private userProducts: CollectionReference;
 
   constructor(private readonly firebaseService: FirebaseService) {}
 
   onModuleInit() {
     this.db = this.firebaseService.getFirestore();
-    this.productsCollection = this.db.collection('products');
+  }
+
+  private getUserProductsCollection(userId: string) {
+    return this.db.collection('users').doc(userId).collection('products');
   }
 
   async create(dto: CreateProductDto) {
+    const { empresaId, ...data } = dto;
+    this.userProducts = this.getUserProductsCollection(empresaId);
     const productData = {
-      ...dto,
+      ...data,
       createdAt: new Date(),
     };
 
-    const docRef = await this.productsCollection.add(productData);
-    return { id: docRef.id, ...productData };
+    const docRef = await this.userProducts.add(productData);
+    const docSnapshot = await docRef.get();
+    return { id: docSnapshot.id, ...docSnapshot.data() };
   }
 
-  async findAll() {
-    const snapshot = await this.productsCollection.get();
+  async findAll(empresaId: string) {
+    this.userProducts = this.getUserProductsCollection(empresaId);
+    const snapshot = await this.userProducts.get();
     return snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
   }
 
-  async findOne(id: string) {
-    const doc = await this.productsCollection.doc(id).get();
+  async findOne(empresaId: string, produtoId: string) {
+    this.userProducts = this.getUserProductsCollection(empresaId);
+    const doc = await this.userProducts.doc(produtoId).get();
     if (!doc.exists) {
       throw new NotFoundException('Produto não encontrado');
     }
     return { id: doc.id, ...doc.data() };
   }
 
-  async update(ownerId: string, dto: UpdateProductDto) {
-    const querySnapshot = await this.productsCollection
-      .where('ownerId', '==', ownerId)
-      .limit(1)
-      .get();
+  async update(empresaId: string, produtoId: string, dto: UpdateProductDto) {
+    const userProducts = this.getUserProductsCollection(empresaId);
+    const docRef = userProducts.doc(produtoId);
+    const doc = await docRef.get();
 
-    if (querySnapshot.empty) {
-      throw new NotFoundException('Produto não encontrado para este ownerId');
+    if (!doc.exists) {
+      throw new NotFoundException('Produto não encontrado');
     }
 
-    const docRef = querySnapshot.docs[0].ref;
     await docRef.update(dto as UpdateData<DocumentData>);
-
     const updatedDoc = await docRef.get();
     return { id: updatedDoc.id, ...updatedDoc.data() };
   }
 
-  async remove(id: string) {
-    const querySnapshot = await this.productsCollection.where('ownerId', '==', id).limit(1).get();
+  async remove(empresaId: string, produtoId: string) {
+    const userProducts = this.getUserProductsCollection(empresaId);
+    const docRef = userProducts.doc(produtoId);
+    const doc = await docRef.get();
 
-    if (querySnapshot.empty) {
-      throw new NotFoundException('Produto não encontrado para este ownerId');
+    if (!doc.exists) {
+      throw new NotFoundException('Produto não encontrado');
     }
-    const docRef = querySnapshot.docs[0].ref;
 
     await docRef.delete();
     return { message: 'Produto removido com sucesso' };

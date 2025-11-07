@@ -36,5 +36,5 @@ export class CreateProductDto {
   categoria: string;
 
   @IsString()
-  ownerId: string;
+  empresaId: string;
 }
