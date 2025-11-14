@@ -1,18 +1,25 @@
 import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
-import { FirebaseService } from '../../firebase/firebase.service.js';
+import { FirebaseService } from '../../firebase/firebase.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CollectionReference, DocumentData, Firestore, UpdateData } from 'firebase-admin/firestore';
+import { v4 as uuidv4 } from 'uuid';
+import { CloudinaryService } from '../../cloudinary/cloudinary.service';
 
 @Injectable()
 export class ProductsService implements OnModuleInit {
   private db: Firestore;
   private userProducts: CollectionReference;
+  private storage: FirebaseService['storage'];
 
-  constructor(private readonly firebaseService: FirebaseService) {}
+  constructor(
+    private readonly firebaseService: FirebaseService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   onModuleInit() {
     this.db = this.firebaseService.getFirestore();
+    this.storage = this.firebaseService.getStorage();
   }
 
   private getUserProductsCollection(userId: string) {
@@ -75,5 +82,24 @@ export class ProductsService implements OnModuleInit {
 
     await docRef.delete();
     return { message: 'Produto removido com sucesso' };
+  }
+
+  async uploadProductImage(empresaId: string, produtoId: string, file: Express.Multer.File) {
+    const uploadResult = await this.cloudinaryService.uploadImage(file, {
+      folder: `users/${empresaId}/products/${produtoId}`,
+      public_id: uuidv4(),
+    });
+
+    const userProducts = this.getUserProductsCollection(empresaId);
+    const docRef = userProducts.doc(produtoId);
+    const doc = await docRef.get();
+    if (!doc.exists) throw new NotFoundException('Produto não encontrado');
+
+    const data = doc.data() || {};
+    const fotos = Array.isArray(data.fotos) ? data.fotos : [];
+    fotos.push(uploadResult.secure_url);
+    await docRef.update({ fotos });
+
+    return { message: 'Upload realizado com sucesso', image_url: uploadResult.secure_url };
   }
 }

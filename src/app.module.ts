@@ -4,9 +4,10 @@ import { AppService } from './app.service.js';
 import { AuthModule } from './auth/auth.module.js';
 import { FirebaseModule } from '../firebase/firebase.module.js';
 import { ProductsModule } from './products/products.module.js';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module.js';
 
 @Module({
-  imports: [AuthModule, FirebaseModule, ProductsModule],
+  imports: [AuthModule, FirebaseModule, ProductsModule, CloudinaryModule],
   controllers: [AppController],
   providers: [AppService],
 })

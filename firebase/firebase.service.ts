@@ -2,11 +2,13 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { Auth } from 'firebase-admin/auth';
 import { Firestore } from 'firebase-admin/firestore';
+import { Storage } from 'firebase-admin/storage';
 
 @Injectable()
 export class FirebaseService implements OnModuleInit {
   private db: FirebaseFirestore.Firestore;
   private auth: admin.auth.Auth;
+  private storage: admin.storage.Storage;
 
   onModuleInit() {
     if (admin.apps.length === 0) {
@@ -21,6 +23,7 @@ export class FirebaseService implements OnModuleInit {
 
     this.db = admin.firestore();
     this.auth = admin.auth();
+    this.storage = admin.storage();
   }
 
   getFirestore(): Firestore {
@@ -29,5 +32,9 @@ export class FirebaseService implements OnModuleInit {
 
   getAuth(): Auth {
     return this.auth;
+  }
+
+  getStorage(): Storage {
+    return this.storage;
   }
 }
