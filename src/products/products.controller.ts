@@ -22,7 +22,7 @@ export class ProductsController {
     return this.productsService.getProductById(productId);
   }
 
-  @Get(':empresaId')
+  @Get('/empresa/:empresaId')
   findAll(@Param('empresaId') empresaId: string) {
     return this.productsService.findAll(empresaId);
   }
