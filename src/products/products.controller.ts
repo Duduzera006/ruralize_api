@@ -12,6 +12,16 @@ export class ProductsController {
     return this.productsService.create(dto);
   }
 
+  @Get()
+  getAllProducts() {
+    return this.productsService.getAllProducts();
+  }
+
+  @Get(':id')
+  async getProductById(@Param('id') productId: string) {
+    return this.productsService.getProductById(productId);
+  }
+
   @Get(':empresaId')
   findAll(@Param('empresaId') empresaId: string) {
     return this.productsService.findAll(empresaId);

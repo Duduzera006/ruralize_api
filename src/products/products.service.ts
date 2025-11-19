@@ -10,7 +10,6 @@ import { CloudinaryService } from '../../cloudinary/cloudinary.service';
 export class ProductsService implements OnModuleInit {
   private db: Firestore;
   private userProducts: CollectionReference;
-  private storage: FirebaseService['storage'];
 
   constructor(
     private readonly firebaseService: FirebaseService,
@@ -19,7 +18,6 @@ export class ProductsService implements OnModuleInit {
 
   onModuleInit() {
     this.db = this.firebaseService.getFirestore();
-    this.storage = this.firebaseService.getStorage();
   }
 
   private getUserProductsCollection(userId: string) {
@@ -27,7 +25,7 @@ export class ProductsService implements OnModuleInit {
   }
 
   async create(dto: CreateProductDto) {
-    const { empresaId, ...data } = dto;
+    const { empresaId, fotos, ...data } = dto;
     this.userProducts = this.getUserProductsCollection(empresaId);
     const productData = {
       ...data,
@@ -36,7 +34,49 @@ export class ProductsService implements OnModuleInit {
 
     const docRef = await this.userProducts.add(productData);
     const docSnapshot = await docRef.get();
+
     return { id: docSnapshot.id, ...docSnapshot.data() };
+  }
+
+  async getAllProducts() {
+    const snapshot = await this.db.collectionGroup('products').get();
+    if (snapshot.empty) return [];
+
+    const allProducts = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      const pathSegments = doc.ref.path.split('/');
+      const empresaId = pathSegments[1];
+
+      return {
+        id: doc.id,
+        empresaId,
+        ...data,
+      };
+    });
+
+    return allProducts;
+  }
+
+  async getProductById(productId: string) {
+    const snapshot = await this.db
+      .collectionGroup('products')
+      .where('__name__', '==', productId)
+      .get();
+
+    if (snapshot.empty) {
+      throw new NotFoundException('Produto não encontrado.');
+    }
+
+    const doc = snapshot.docs[0];
+    const data = doc.data();
+    const pathSegments = doc.ref.path.split('/');
+    const empresaId = pathSegments[1];
+
+    return {
+      id: doc.id,
+      empresaId,
+      ...data,
+    };
   }
 
   async findAll(empresaId: string) {
