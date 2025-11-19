@@ -57,25 +57,19 @@ export class ProductsService implements OnModuleInit {
     return allProducts;
   }
 
-  async getProductById(productId: string) {
-    const snapshot = await this.db
-      .collectionGroup('products')
-      .where('__name__', '==', productId)
-      .get();
+  async getProductById(empresaId: string, productId: string) {
+    const docRef = this.db.collection('users').doc(empresaId).collection('products').doc(productId);
 
-    if (snapshot.empty) {
+    const doc = await docRef.get();
+
+    if (!doc.exists) {
       throw new NotFoundException('Produto não encontrado.');
     }
-
-    const doc = snapshot.docs[0];
-    const data = doc.data();
-    const pathSegments = doc.ref.path.split('/');
-    const empresaId = pathSegments[1];
 
     return {
       id: doc.id,
       empresaId,
-      ...data,
+      ...doc.data(),
     };
   }
 

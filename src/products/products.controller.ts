@@ -17,11 +17,6 @@ export class ProductsController {
     return this.productsService.getAllProducts();
   }
 
-  @Get(':id')
-  async getProductById(@Param('id') productId: string) {
-    return this.productsService.getProductById(productId);
-  }
-
   @Get('/empresa/:empresaId')
   findAll(@Param('empresaId') empresaId: string) {
     return this.productsService.findAll(empresaId);
