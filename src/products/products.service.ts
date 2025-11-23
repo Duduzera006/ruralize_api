@@ -57,6 +57,21 @@ export class ProductsService implements OnModuleInit {
     return allProducts;
   }
 
+  async getTotalSales(empresaId: string) {
+    const docRef = this.db.collection('users').doc(empresaId).collection('products');
+    const doc = await docRef.get();
+    let totalSales = 0;
+    if (doc.size === 0) {
+      throw new NotFoundException('Nenhum produto encontrado.');
+    }
+    for (let index = 0; index < doc.size; index++) {
+      const element = doc[index];
+      const saleValue = element.preco;
+      totalSales += saleValue;
+    }
+    return totalSales;
+  }
+
   async getProductById(empresaId: string, productId: string) {
     const docRef = this.db.collection('users').doc(empresaId).collection('products').doc(productId);
 

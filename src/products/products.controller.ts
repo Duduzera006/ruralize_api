@@ -27,6 +27,11 @@ export class ProductsController {
     return this.productsService.findOne(empresaId, produtoId);
   }
 
+  @Get('/totalVendas/:empresaId')
+  getTotalSales(@Param('empresaId') empresaId: string) {
+    return this.productsService.getTotalSales(empresaId);
+  }
+
   @Patch(':empresaId/:produtoId')
   update(
     @Param('empresaId') empresaId: string,
