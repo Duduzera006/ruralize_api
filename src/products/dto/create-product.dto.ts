@@ -22,7 +22,8 @@ export class CreateProductDto {
   @ArrayMinSize(1)
   @ArrayMaxSize(5)
   @IsString({ each: true })
-  fotos: string[];
+  @IsOptional()
+  fotos?: string[];
 
   @IsNumber()
   @Min(0)
