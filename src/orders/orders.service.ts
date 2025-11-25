@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit, BadRequestException } from '@nestjs/common';
 import { FirebaseService } from '../../firebase/firebase.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -21,26 +21,51 @@ export class OrdersService implements OnModuleInit {
 
   async create(dto: CreateOrderDto) {
     const { empresaId, ...data } = dto as any;
-    this.userOrders = this.getUserOrdersCollection(empresaId);
-    const docRef = await this.userOrders.add({ ...data, createdAt: new Date() });
-    const doc = await docRef.get();
-    return { id: doc.id, empresaId, ...doc.data() };
+
+    const userProductsColl = this.db.collection('users').doc(empresaId).collection('products');
+    const userOrdersColl = this.getUserOrdersCollection(empresaId);
+
+    const result = await this.db.runTransaction(async (tx) => {
+      for (const item of data.items || []) {
+        const productRef = userProductsColl.doc(item.productId);
+        const prodSnap = await tx.get(productRef);
+        if (!prodSnap.exists) {
+          throw new NotFoundException(
+            `Produto ${item.productId} não encontrado para a empresa ${empresaId}`,
+          );
+        }
+
+        const prodData = prodSnap.data() as any;
+        const estoqueAtual = Number(prodData.estoque ?? 0);
+        const quantidade = Number(item.quantidade ?? 0);
+
+        if (estoqueAtual < quantidade) {
+          throw new BadRequestException(`Estoque insuficiente para o produto ${item.productId}`);
+        }
+
+        await tx.update(productRef, { estoque: estoqueAtual - quantidade });
+      }
+
+      const orderRef = userOrdersColl.doc();
+      const orderPayload = { ...data, createdAt: new Date() };
+      await tx.set(orderRef, orderPayload);
+
+      return { id: orderRef.id, empresaId, ...orderPayload };
+    });
+
+    return result;
   }
 
   async createMany(dtos: CreateOrderDto[]) {
     if (!Array.isArray(dtos) || dtos.length === 0) return [];
 
-    const created = await Promise.all(
-      dtos.map(async (dto) => {
-        const { empresaId, ...data } = dto as any;
-        const userOrders = this.getUserOrdersCollection(empresaId);
-        const docRef = await userOrders.add({ ...data, createdAt: new Date() });
-        const doc = await docRef.get();
-        return { id: doc.id, empresaId, ...doc.data() };
-      }),
-    );
+    const results = [] as any[];
+    for (const dto of dtos) {
+      const created = await this.create(dto);
+      results.push(created);
+    }
 
-    return created;
+    return results;
   }
 
   async getAllOrders() {
@@ -68,13 +93,14 @@ export class OrdersService implements OnModuleInit {
     }
 
     let total = 0;
+    let totalOrders = snapshot.size;
 
     snapshot.forEach((doc) => {
       const data = doc.data();
       total += data.total;
     });
 
-    return total;
+    return { total, totalOrders };
   }
 
   async findAll(empresaId: string) {
