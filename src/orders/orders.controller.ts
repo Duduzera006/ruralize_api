@@ -22,6 +22,11 @@ export class OrdersController {
     return this.ordersService.findAll(empresaId);
   }
 
+  @Get('/totalVendas/:empresaId')
+  getTotalSales(@Param('empresaId') empresaId: string) {
+    return this.ordersService.getTotalSales(empresaId);
+  }
+
   @Get(':empresaId/:orderId')
   findOne(@Param('empresaId') empresaId: string, @Param('orderId') orderId: string) {
     return this.ordersService.findOne(empresaId, orderId);

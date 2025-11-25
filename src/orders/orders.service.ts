@@ -44,6 +44,23 @@ export class OrdersService implements OnModuleInit {
     });
   }
 
+  async getTotalSales(empresaId: string) {
+    const snapshot = await this.db.collection('users').doc(empresaId).collection('orders').get();
+
+    if (snapshot.empty) {
+      return 0;
+    }
+
+    let total = 0;
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      total += data.total;
+    });
+
+    return total;
+  }
+
   async findAll(empresaId: string) {
     this.userOrders = this.getUserOrdersCollection(empresaId);
     const snapshot = await this.userOrders.get();
