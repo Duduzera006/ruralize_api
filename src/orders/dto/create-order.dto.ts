@@ -21,14 +21,17 @@ export class OrderItemDto {
   @IsString()
   titulo: string;
 
+  @Type(() => Number)
   @IsNumber()
   @Min(1)
   quantidade: number;
 
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
   precoUnitario: number;
 
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
   subtotal: number;
@@ -66,6 +69,7 @@ export class CreateOrderDto {
   @IsString()
   empresaId: string;
 
+  @IsOptional()
   @IsString()
   compradorId?: string;
 
@@ -73,6 +77,7 @@ export class CreateOrderDto {
   @IsEnum(['pending', 'paid', 'shipped', 'delivered', 'cancelled'] as any)
   status?: OrderStatus = 'pending';
 
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
   total: number;

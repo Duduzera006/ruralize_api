@@ -8,8 +8,12 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  create(@Body() dto: CreateOrderDto) {
-    return this.ordersService.create(dto);
+  create(@Body() dto: CreateOrderDto | CreateOrderDto[]) {
+    if (Array.isArray(dto)) {
+      return this.ordersService.createMany(dto);
+    }
+
+    return this.ordersService.create(dto as CreateOrderDto);
   }
 
   @Get()

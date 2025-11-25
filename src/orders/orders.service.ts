@@ -24,7 +24,23 @@ export class OrdersService implements OnModuleInit {
     this.userOrders = this.getUserOrdersCollection(empresaId);
     const docRef = await this.userOrders.add({ ...data, createdAt: new Date() });
     const doc = await docRef.get();
-    return { id: doc.id, ...doc.data() };
+    return { id: doc.id, empresaId, ...doc.data() };
+  }
+
+  async createMany(dtos: CreateOrderDto[]) {
+    if (!Array.isArray(dtos) || dtos.length === 0) return [];
+
+    const created = await Promise.all(
+      dtos.map(async (dto) => {
+        const { empresaId, ...data } = dto as any;
+        const userOrders = this.getUserOrdersCollection(empresaId);
+        const docRef = await userOrders.add({ ...data, createdAt: new Date() });
+        const doc = await docRef.get();
+        return { id: doc.id, empresaId, ...doc.data() };
+      }),
+    );
+
+    return created;
   }
 
   async getAllOrders() {
