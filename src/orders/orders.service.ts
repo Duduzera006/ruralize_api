@@ -93,14 +93,16 @@ export class OrdersService implements OnModuleInit {
     }
 
     let total = 0;
+    let orderProductQuantity = 0;
     let totalOrders = snapshot.size;
 
     snapshot.forEach((doc) => {
       const data = doc.data();
       total += data.total;
+      orderProductQuantity += data.items.length;
     });
 
-    return { total, totalOrders };
+    return { total, totalOrders, orderProductQuantity };
   }
 
   async findAll(empresaId: string) {
