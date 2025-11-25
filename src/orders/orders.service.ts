@@ -99,7 +99,11 @@ export class OrdersService implements OnModuleInit {
     snapshot.forEach((doc) => {
       const data = doc.data();
       total += data.total;
-      orderProductQuantity += data.items.quantidade;
+      if (Array.isArray(data.items)) {
+        data.items.forEach((item) => {
+          orderProductQuantity += item.quantidade;
+        });
+      }
     });
 
     return { total, totalOrders, orderProductQuantity };
