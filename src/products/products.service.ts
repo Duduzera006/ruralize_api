@@ -115,7 +115,10 @@ export class ProductsService implements OnModuleInit {
       throw new NotFoundException('Produto não encontrado');
     }
 
-    await docRef.set(dto as UpdateData<DocumentData>, { merge: true });
+    const plain = JSON.parse(JSON.stringify(dto || {}));
+    const cleaned = Object.fromEntries(Object.entries(plain).filter(([, v]) => v !== undefined));
+
+    await docRef.set(cleaned as UpdateData<DocumentData>, { merge: true });
     const updatedDoc = await docRef.get();
     return { id: updatedDoc.id, ...updatedDoc.data() };
   }
