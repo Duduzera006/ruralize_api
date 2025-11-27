@@ -43,7 +43,9 @@ $ cd ruralize_api
 # 3. Instale as dependências
 
 $ npm install
-Variáveis de Ambiente
+
+Variáveis de Ambiente:
+
 Crie um arquivo .env na raiz do projeto e configure as variáveis de ambiente necessárias para a conexão com o Firebase. O arquivo pode ser semelhante a:
 
 FIREBASE_API_KEY=sua-api-key
