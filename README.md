@@ -47,13 +47,18 @@ Variáveis de Ambiente
 Crie um arquivo .env na raiz do projeto e configure as variáveis de ambiente necessárias para a conexão com o Firebase. O arquivo pode ser semelhante a:
 
 FIREBASE_API_KEY=sua-api-key
+
 FIREBASE_AUTH_DOMAIN=seu-auth-domain.firebaseapp.com
+
 FIREBASE_PROJECT_ID=seu-project-id
+
 FIREBASE_STORAGE_BUCKET=seu-storage-bucket.appspot.com
+
 FIREBASE_MESSAGING_SENDER_ID=seu-messaging-sender-id
+
 FIREBASE_APP_ID=seu-app-id
-Execução
-Bash
+
+Execução Bash
 
 # Modo de desenvolvimento
 
