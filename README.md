@@ -9,6 +9,7 @@ Uma API robusta construída com NestJS e Firebase para suportar aplicações web
 </p>
 
 🚀 Sobre o Projeto
+
 Este repositório contém o código-fonte de uma API REST desenvolvida com NestJS, um framework progressivo para aplicações Node.js, e o Firebase como serviço de backend. A API foi projetada para ser a espinha dorsal de um sistema que inclui:
 
 Sistema Web: Desenvolvido em Next.js (separado).
@@ -32,12 +33,15 @@ Instalação
 Bash
 
 # 1. Clone este repositório
+
 $ git clone https://github.com/Duduzera006/ruralize_api.git
 
 # 2. Navegue até o diretório do projeto
+
 $ cd ruralize_api
 
 # 3. Instale as dependências
+
 $ npm install
 Variáveis de Ambiente
 Crie um arquivo .env na raiz do projeto e configure as variáveis de ambiente necessárias para a conexão com o Firebase. O arquivo pode ser semelhante a:
@@ -52,9 +56,11 @@ Execução
 Bash
 
 # Modo de desenvolvimento
+
 $ npm run start:dev
 
 # Modo de produção
+
 $ npm run start:prod
 A API estará disponível em http://localhost:3000 (ou na porta configurada).
 
