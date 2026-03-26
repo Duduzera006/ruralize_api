@@ -14,7 +14,13 @@ export class UploadController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post(':empresaId/:produtoId/upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB
+      },
+    }),
+  )
   async uploadFile(
     @Param('empresaId') empresaId: string,
     @Param('produtoId') produtoId: string,
