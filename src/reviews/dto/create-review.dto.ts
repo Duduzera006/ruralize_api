@@ -1,4 +1,5 @@
-import { IsString, IsNotEmpty, IsNumber, Min, Max } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, Min, Max, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateReviewDto {
@@ -17,19 +18,20 @@ export class CreateReviewDto {
   @IsNotEmpty()
   buyerId: string;
 
-  @ApiProperty({ description: 'Nome do comprador para exibição' })
+  @ApiProperty({ description: 'Nome do comprador para exibição', required: false })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  buyerName: string;
+  buyerName?: string;
 
   @ApiProperty({ description: 'Nota de 1 a 5', minimum: 1, maximum: 5 })
+  @Type(() => Number)
   @IsNumber()
   @Min(1)
   @Max(5)
   rating: number;
 
-  @ApiProperty({ description: 'Comentário da avaliação' })
+  @ApiProperty({ description: 'Comentário da avaliação', required: false })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  comment: string;
+  comment?: string;
 }
