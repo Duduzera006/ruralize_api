@@ -6,6 +6,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { json, urlencoded } from 'express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import type { Request, Response } from 'express';
+
 dotenv.config();
 
 let cachedServer: any;
@@ -36,13 +38,13 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
 
     await app.init();
-    cachedServer = app.getHttpAdapter().getInstance();
+    cachedServer = app.getHttpAdapter().getInstance() as unknown;
   }
-  return cachedServer;
+  return cachedServer as (req: Request, res: Response) => void;
 }
 
 // Exportar para a Vercel
-export default async (req: any, res: any) => {
+export default async (req: Request, res: Response) => {
   const server = await bootstrap();
   return server(req, res);
 };
@@ -55,7 +57,7 @@ if (process.env.NODE_ENV !== 'production') {
     app.use(json({ limit: '10mb' }));
     app.use(urlencoded({ extended: true, limit: '10mb' }));
     app.enableCors();
-    
+
     const config = new DocumentBuilder()
       .setTitle('Ruralize API')
       .setDescription('Local Development')
@@ -63,9 +65,9 @@ if (process.env.NODE_ENV !== 'production') {
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document);
-    
-    await app.listen(process.env.PORT ?? 3000);
-    console.log(`Application is running on: http://localhost:${process.env.PORT ?? 3000}`);
+
+    await app.listen(process.env.PORT ?? 3001);
+    console.log(`Application is running on: http://localhost:${process.env.PORT ?? 3001}`);
   };
   void start();
 }

@@ -1,9 +1,8 @@
 import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { FirebaseService } from '../firebase/firebase.service.js';
 import { SignUpDto } from './dto/signup.dto.js';
-import * as admin from 'firebase-admin';
 import { UpdateUserDto } from './dto/update-user.dto.js';
-import { CollectionReference, Firestore } from 'firebase-admin/firestore';
+import { CollectionReference, Firestore, FieldValue } from 'firebase-admin/firestore';
 import { Auth } from 'firebase-admin/auth';
 
 @Injectable()
@@ -39,7 +38,7 @@ export class AuthService implements OnModuleInit {
       email: dto.email,
       displayName: dto.displayName,
       cnpj: dto.cnpj,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      createdAt: FieldValue.serverTimestamp(),
     });
 
     return { uid: userRecord.uid, email: dto.email, displayName: dto.displayName };
@@ -58,7 +57,7 @@ export class AuthService implements OnModuleInit {
           email: dto.email,
           displayName: dto.displayName,
           cnpj: dto.cnpj,
-          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: FieldValue.serverTimestamp(),
         },
         { merge: true },
       );
@@ -98,7 +97,7 @@ export class AuthService implements OnModuleInit {
     await this.usersCollection.doc(uid).set(
       {
         fcmToken: token,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: FieldValue.serverTimestamp(),
       },
       { merge: true },
     );
