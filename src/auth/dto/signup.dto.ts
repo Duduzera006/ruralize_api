@@ -1,4 +1,4 @@
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsString, MinLength, IsOptional } from 'class-validator';
 import { isValidCnpj } from '../../helpers/isValidCNPJ.decorator.js';
 
 export class SignUpDto {
@@ -12,6 +12,7 @@ export class SignUpDto {
   @IsString()
   displayName: string;
 
+  @IsOptional()
   @isValidCnpj()
-  cnpj: string;
+  cnpj?: string;
 }

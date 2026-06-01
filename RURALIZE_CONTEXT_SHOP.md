@@ -55,7 +55,7 @@ Campos utilizados no frontend:
 | :--- | :--- | :--- |
 | `GET` | `/products` | Lista todos os produtos (Polling de 10s no Shop) |
 | `GET` | `/products/{empresaId}/{id}` | Detalhes de um produto específico |
-| `POST` | `/auth/signup` | Registro com campo adicional `role: "customer"` |
+| `POST` | `/auth/signup` | Registro com campo adicional `role: "customer"`. **Nota:** O campo `cnpj` deve ser omitido para este papel para evitar erros de validação no backend. |
 | `POST` | `/orders` | Criação de pedidos após fluxo de checkout |
 | `GET` | `/orders/comprador/{uid}` | Histórico de pedidos para o comprador |
 
