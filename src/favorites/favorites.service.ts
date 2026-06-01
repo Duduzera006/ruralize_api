@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { FirebaseService } from '../../firebase/firebase.service';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
+import { FirebaseService } from '../../firebase/firebase.service.js';
+import { CreateFavoriteDto } from './dto/create-favorite.dto.js';
 import { CollectionReference, Firestore } from 'firebase-admin/firestore';
 
 @Injectable()

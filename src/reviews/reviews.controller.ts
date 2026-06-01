@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { ReviewsService } from './reviews.service';
-import { CreateReviewDto } from './dto/create-review.dto';
+import { ReviewsService } from './reviews.service.js';
+import { CreateReviewDto } from './dto/create-review.dto.js';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('reviews')

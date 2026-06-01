@@ -1,11 +1,11 @@
 import * as multer from 'multer';
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
-import { ProductsService } from './products.service';
-import { ProductsController } from './products.controller';
-import { UploadController } from './upload.controller';
-import { FirebaseModule } from '../../firebase/firebase.module';
-import { CloudinaryModule } from '../../cloudinary/cloudinary.module';
+import { ProductsService } from './products.service.js';
+import { ProductsController } from './products.controller.js';
+import { UploadController } from './upload.controller.js';
+import { FirebaseModule } from '../../firebase/firebase.module.js';
+import { CloudinaryModule } from '../../cloudinary/cloudinary.module.js';
 
 @Module({
   imports: [

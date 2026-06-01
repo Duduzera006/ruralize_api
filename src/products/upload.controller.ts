@@ -7,7 +7,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ProductsService } from './products.service';
+import { ProductsService } from './products.service.js';
 
 @Controller('products')
 export class UploadController {

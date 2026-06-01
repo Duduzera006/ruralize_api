@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { DeliveriesService } from './deliveries.service';
-import { CreateDeliveryDto } from './dto/create-delivery.dto';
-import { UpdateDeliveryDto } from './dto/update-delivery.dto';
+import { DeliveriesService } from './deliveries.service.js';
+import { CreateDeliveryDto } from './dto/create-delivery.dto.js';
+import { UpdateDeliveryDto } from './dto/update-delivery.dto.js';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @ApiTags('deliveries')

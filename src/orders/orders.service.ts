@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException, OnModuleInit, BadRequestException } from '@nestjs/common';
-import { FirebaseService } from '../../firebase/firebase.service';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
+import { FirebaseService } from '../../firebase/firebase.service.js';
+import { CreateOrderDto } from './dto/create-order.dto.js';
+import { UpdateOrderDto } from './dto/update-order.dto.js';
 import { CollectionReference, DocumentData, Firestore, UpdateData } from 'firebase-admin/firestore';
-import { NotificationsService } from '../notifications/notifications.service';
-import { NotificationType } from '../notifications/dto/create-notification.dto';
+import { NotificationsService } from '../notifications/notifications.service.js';
+import { NotificationType } from '../notifications/dto/create-notification.dto.js';
 
 @Injectable()
 export class OrdersService implements OnModuleInit {

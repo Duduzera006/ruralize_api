@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param, Delete, Patch } from '@nestjs/common';
-import { NotificationsService } from './notifications.service';
-import { CreateNotificationDto } from './dto/create-notification.dto';
+import { NotificationsService } from './notifications.service.js';
+import { CreateNotificationDto } from './dto/create-notification.dto.js';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('notifications')

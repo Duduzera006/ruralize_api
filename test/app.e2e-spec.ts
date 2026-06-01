@@ -18,7 +18,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
-    const server = app.getHttpServer() as App;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const server: any = app.getHttpServer();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return request(server).get('/').expect(200).expect('Hello World!');
   });
 });
