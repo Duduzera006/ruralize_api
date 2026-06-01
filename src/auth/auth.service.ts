@@ -93,4 +93,28 @@ export class AuthService implements OnModuleInit {
 
     return { deleted: true };
   }
+
+  async updateFcmToken(uid: string, token: string) {
+    await this.usersCollection.doc(uid).set(
+      {
+        fcmToken: token,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      },
+      { merge: true },
+    );
+    return { success: true };
+  }
+
+  async getPublicStores() {
+    const snapshot = await this.usersCollection.get();
+    return snapshot.docs.map((doc) => {
+      const data = doc.data() as DocumentData;
+      return {
+        id: doc.id,
+        displayName: data.displayName as string,
+        email: data.email as string,
+        // Adicionar outros campos públicos conforme necessário futuramente (ex: logo)
+      };
+    });
+  }
 }

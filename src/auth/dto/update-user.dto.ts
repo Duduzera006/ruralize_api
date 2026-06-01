@@ -21,4 +21,8 @@ export class UpdateUserDto {
   @MinLength(6)
   @isValidCnpj()
   cnpj?: string;
+
+  @IsOptional()
+  @IsString()
+  fcmToken?: string;
 }

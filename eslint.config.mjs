@@ -68,7 +68,7 @@ export default tseslint.config(
         },
         {
           selector: 'property',
-          format: ['snakeCase'],
+          format: ['camelCase'],
         },
         {
           selector: 'parameter',

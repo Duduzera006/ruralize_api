@@ -38,4 +38,8 @@ export class CreateProductDto {
 
   @IsString()
   empresaId: string;
+
+  @IsOptional()
+  @IsArray()
+  options?: any[];
 }

@@ -38,14 +38,32 @@ export class ProductsService implements OnModuleInit {
     return { id: docSnapshot.id, ...docSnapshot.data() };
   }
 
-  async getAllProducts() {
-    const snapshot = await this.db.collectionGroup('products').get();
+  async getAllProducts(filters?: { titulo?: string; categoria?: string; empresaId?: string }) {
+    let snapshot: FirebaseFirestore.QuerySnapshot<DocumentData>;
+
+    if (filters?.empresaId) {
+      let query: FirebaseFirestore.Query<DocumentData> = this.db
+        .collection('users')
+        .doc(filters.empresaId)
+        .collection('products');
+      if (filters.categoria) {
+        query = query.where('categoria', '==', filters.categoria);
+      }
+      snapshot = await query.get();
+    } else {
+      let query: FirebaseFirestore.Query<DocumentData> = this.db.collectionGroup('products');
+      if (filters?.categoria) {
+        query = query.where('categoria', '==', filters.categoria);
+      }
+      snapshot = await query.get();
+    }
+
     if (snapshot.empty) return [];
 
-    const allProducts = snapshot.docs.map((doc) => {
+    let allProducts = snapshot.docs.map((doc) => {
       const data = doc.data();
       const pathSegments = doc.ref.path.split('/');
-      const empresaId = pathSegments[1];
+      const empresaId = (data.empresaId as string) || pathSegments[1];
 
       return {
         id: doc.id,
@@ -53,6 +71,11 @@ export class ProductsService implements OnModuleInit {
         ...data,
       };
     });
+
+    if (filters?.titulo) {
+      const search = filters.titulo.toLowerCase();
+      allProducts = allProducts.filter((p) => (p.titulo as string)?.toLowerCase().includes(search));
+    }
 
     return allProducts;
   }
@@ -153,7 +176,7 @@ export class ProductsService implements OnModuleInit {
       fotos.push(uploadResult.secure_url);
       await docRef.update({ fotos });
 
-      return { message: 'Upload realizado com sucesso', image_url: uploadResult.secure_url };
+      return { message: 'Upload realizado com sucesso', imageUrl: uploadResult.secure_url };
     } catch (error) {
       console.error('ERRO CLOUDINARY DETALHADO:', error);
 

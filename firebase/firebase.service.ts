@@ -4,11 +4,14 @@ import { Auth } from 'firebase-admin/auth';
 import { Firestore } from 'firebase-admin/firestore';
 import { Storage } from 'firebase-admin/storage';
 
+import { Messaging } from 'firebase-admin/messaging';
+
 @Injectable()
 export class FirebaseService implements OnModuleInit {
   private db: FirebaseFirestore.Firestore;
   private auth: admin.auth.Auth;
   private storage: admin.storage.Storage;
+  private messaging: admin.messaging.Messaging;
 
   onModuleInit() {
     if (admin.apps.length === 0) {
@@ -24,6 +27,7 @@ export class FirebaseService implements OnModuleInit {
     this.db = admin.firestore();
     this.auth = admin.auth();
     this.storage = admin.storage();
+    this.messaging = admin.messaging();
   }
 
   getFirestore(): Firestore {
@@ -36,5 +40,9 @@ export class FirebaseService implements OnModuleInit {
 
   getStorage(): Storage {
     return this.storage;
+  }
+
+  getMessaging(): Messaging {
+    return this.messaging;
   }
 }

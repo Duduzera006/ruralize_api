@@ -6,9 +6,23 @@ import { FirebaseModule } from '../firebase/firebase.module.js';
 import { ProductsModule } from './products/products.module.js';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module.js';
 import { OrdersModule } from './orders/orders.module.js';
+import { DeliveriesModule } from './deliveries/deliveries.module.js';
+import { NotificationsModule } from './notifications/notifications.module.js';
+import { ReviewsModule } from './reviews/reviews.module.js';
+import { FavoritesModule } from './favorites/favorites.module.js';
 
 @Module({
-  imports: [AuthModule, FirebaseModule, ProductsModule, CloudinaryModule, OrdersModule],
+  imports: [
+    AuthModule,
+    FirebaseModule,
+    ProductsModule,
+    CloudinaryModule,
+    OrdersModule,
+    DeliveriesModule,
+    NotificationsModule,
+    ReviewsModule,
+    FavoritesModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
