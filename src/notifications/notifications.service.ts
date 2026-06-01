@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { FirebaseService } from '../../firebase/firebase.service.js';
+import { FirebaseService } from '../firebase/firebase.service.js';
 import { CreateNotificationDto } from './dto/create-notification.dto.js';
 import { CollectionReference, Firestore } from 'firebase-admin/firestore';
 

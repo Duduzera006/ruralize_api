@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException, OnModuleInit, BadRequestException } from '@nestjs/common';
-import { FirebaseService } from '../../firebase/firebase.service.js';
+import { FirebaseService } from '../firebase/firebase.service.js';
 import { CreateProductDto } from './dto/create-product.dto.js';
 import { UpdateProductDto } from './dto/update-product.dto.js';
 import { CollectionReference, DocumentData, Firestore, UpdateData } from 'firebase-admin/firestore';
 import { v4 as uuidv4 } from 'uuid';
-import { CloudinaryService } from '../../cloudinary/cloudinary.service.js';
+import { CloudinaryService } from '../cloudinary/cloudinary.service.js';
 
 @Injectable()
 export class ProductsService implements OnModuleInit {

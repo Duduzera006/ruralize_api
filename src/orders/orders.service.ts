@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, OnModuleInit, BadRequestException } from '@nestjs/common';
-import { FirebaseService } from '../../firebase/firebase.service.js';
+import { FirebaseService } from '../firebase/firebase.service.js';
 import { CreateOrderDto } from './dto/create-order.dto.js';
 import { UpdateOrderDto } from './dto/update-order.dto.js';
 import { CollectionReference, DocumentData, Firestore, UpdateData } from 'firebase-admin/firestore';

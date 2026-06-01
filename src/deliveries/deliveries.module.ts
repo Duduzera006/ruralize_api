@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DeliveriesService } from './deliveries.service.js';
 import { DeliveriesController } from './deliveries.controller.js';
-import { FirebaseModule } from '../../firebase/firebase.module.js';
+import { FirebaseModule } from '../firebase/firebase.module.js';
 
 @Module({
   imports: [FirebaseModule],

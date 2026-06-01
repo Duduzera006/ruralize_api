@@ -4,8 +4,8 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ProductsService } from './products.service.js';
 import { ProductsController } from './products.controller.js';
 import { UploadController } from './upload.controller.js';
-import { FirebaseModule } from '../../firebase/firebase.module.js';
-import { CloudinaryModule } from '../../cloudinary/cloudinary.module.js';
+import { FirebaseModule } from '../firebase/firebase.module.js';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module.js';
 
 @Module({
   imports: [

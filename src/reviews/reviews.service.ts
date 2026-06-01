@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { FirebaseService } from '../../firebase/firebase.service.js';
+import { FirebaseService } from '../firebase/firebase.service.js';
 import { CreateReviewDto } from './dto/create-review.dto.js';
 import { CollectionReference, Firestore } from 'firebase-admin/firestore';
 

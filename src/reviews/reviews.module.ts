@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ReviewsService } from './reviews.service.js';
 import { ReviewsController } from './reviews.controller.js';
-import { FirebaseModule } from '../../firebase/firebase.module.js';
+import { FirebaseModule } from '../firebase/firebase.module.js';
 
 @Module({
   imports: [FirebaseModule],

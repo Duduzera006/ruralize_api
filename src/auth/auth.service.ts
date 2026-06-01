@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
-import { FirebaseService } from '../../firebase/firebase.service.js';
+import { FirebaseService } from '../firebase/firebase.service.js';
 import { SignUpDto } from './dto/signup.dto.js';
 import * as admin from 'firebase-admin';
 import { UpdateUserDto } from './dto/update-user.dto.js';
