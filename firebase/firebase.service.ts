@@ -14,20 +14,31 @@ export class FirebaseService implements OnModuleInit {
   private messaging: admin.messaging.Messaging;
 
   onModuleInit() {
-    if (admin.apps.length === 0) {
-      admin.initializeApp({
-        credential: admin.credential.cert({
-          projectId: process.env.FIREBASE_PROJECT_ID,
-          privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        }),
-      });
-    }
+    console.log('Iniciando FirebaseService...');
+    try {
+      if (admin.apps.length === 0) {
+        if (!process.env.FIREBASE_PROJECT_ID || !process.env.FIREBASE_PRIVATE_KEY || !process.env.FIREBASE_CLIENT_EMAIL) {
+          throw new Error('Variáveis de ambiente do Firebase ausentes!');
+        }
 
-    this.db = admin.firestore();
-    this.auth = admin.auth();
-    this.storage = admin.storage();
-    this.messaging = admin.messaging();
+        admin.initializeApp({
+          credential: admin.credential.cert({
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+          }),
+        });
+        console.log('Firebase Admin inicializado com sucesso.');
+      }
+
+      this.db = admin.firestore();
+      this.auth = admin.auth();
+      this.storage = admin.storage();
+      this.messaging = admin.messaging();
+    } catch (error) {
+      console.error('ERRO FATAL NA INICIALIZAÇÃO DO FIREBASE:', error);
+      throw error;
+    }
   }
 
   getFirestore(): Firestore {
