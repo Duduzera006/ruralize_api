@@ -115,7 +115,7 @@ export class OrdersService implements OnModuleInit {
   async createMany(dtos: CreateOrderDto[]) {
     if (!Array.isArray(dtos) || dtos.length === 0) return [];
 
-    const results = [] as any[];
+    const results: DocumentData[] = [];
     for (const dto of dtos) {
       const created = await this.create(dto);
       results.push(created);
@@ -154,10 +154,10 @@ export class OrdersService implements OnModuleInit {
 
     snapshot.forEach((doc) => {
       const data = doc.data();
-      total += data.total;
+      total += (data.total as number) || 0;
       if (Array.isArray(data.items)) {
-        data.items.forEach((item) => {
-          orderProductQuantity += item.quantidade;
+        (data.items as { quantidade: number }[]).forEach((item) => {
+          orderProductQuantity += item.quantidade || 0;
         });
       }
     });

@@ -59,7 +59,8 @@ export class DeliveriesService implements OnModuleInit {
     }
 
     // Filtrar campos para evitar sobrescrever a empresaId e remover undefined
-    const { empresaId: _empresaId, ...cleanDto } = dto;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { empresaId: empresaIdUnused, ...cleanDto } = dto;
     const updateData = Object.fromEntries(
       Object.entries(cleanDto).filter(([, val]) => val !== undefined),
     );

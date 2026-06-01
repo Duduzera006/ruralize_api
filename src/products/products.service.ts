@@ -25,7 +25,7 @@ export class ProductsService implements OnModuleInit {
   }
 
   async create(dto: CreateProductDto) {
-    const { empresaId, fotos, ...data } = dto;
+    const { empresaId, ...data } = dto;
     this.userProducts = this.getUserProductsCollection(empresaId);
     const productData = {
       ...data,
@@ -57,7 +57,6 @@ export class ProductsService implements OnModuleInit {
       }
       snapshot = await query.get();
     }
-
     if (snapshot.empty) return [];
 
     let allProducts = snapshot.docs.map((doc) => {
@@ -66,32 +65,33 @@ export class ProductsService implements OnModuleInit {
       const empresaId = (data.empresaId as string) || pathSegments[1];
 
       return {
+        ...data,
         id: doc.id,
         empresaId,
-        ...data,
-      };
+      } as DocumentData;
     });
 
     if (filters?.titulo) {
       const search = filters.titulo.toLowerCase();
-      allProducts = allProducts.filter((p) => (p.titulo as string)?.toLowerCase().includes(search));
+      allProducts = allProducts.filter((p) => (p.titulo as string).toLowerCase().includes(search));
     }
 
     return allProducts;
   }
 
   async getTotalSales(empresaId: string) {
-    const docRef = this.db.collection('users').doc(empresaId).collection('products');
-    const doc = await docRef.get();
+    const snapshot = await this.db.collection('users').doc(empresaId).collection('products').get();
     let totalSales = 0;
-    if (doc.size === 0) {
+
+    if (snapshot.empty) {
       throw new NotFoundException('Nenhum produto encontrado.');
     }
-    for (let index = 0; index < doc.size; index++) {
-      const element = doc[index];
-      const saleValue = element.preco;
-      totalSales += saleValue;
-    }
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      totalSales += (data.preco as number) || 0;
+    });
+
     return totalSales;
   }
 
@@ -138,7 +138,7 @@ export class ProductsService implements OnModuleInit {
       throw new NotFoundException('Produto não encontrado');
     }
 
-    const plain = JSON.parse(JSON.stringify(dto || {}));
+    const plain = JSON.parse(JSON.stringify(dto || {})) as Record<string, unknown>;
     const cleaned = Object.fromEntries(Object.entries(plain).filter(([, v]) => v !== undefined));
 
     await docRef.set(cleaned as UpdateData<DocumentData>, { merge: true });
@@ -163,7 +163,7 @@ export class ProductsService implements OnModuleInit {
     try {
       const uploadResult = await this.cloudinaryService.uploadImage(file, {
         folder: `users/${empresaId}/products/${produtoId}`,
-        public_id: uuidv4(),
+        ['public_id']: uuidv4(),
       });
 
       const userProducts = this.getUserProductsCollection(empresaId);
@@ -172,16 +172,17 @@ export class ProductsService implements OnModuleInit {
       if (!doc.exists) throw new NotFoundException('Produto não encontrado');
 
       const data = doc.data() || {};
-      const fotos = Array.isArray(data.fotos) ? data.fotos : [];
+      const fotos = Array.isArray(data.fotos) ? (data.fotos as string[]) : [];
       fotos.push(uploadResult.secure_url);
       await docRef.update({ fotos });
 
       return { message: 'Upload realizado com sucesso', imageUrl: uploadResult.secure_url };
-    } catch (error) {
-      console.error('ERRO CLOUDINARY DETALHADO:', error);
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      console.error('ERRO CLOUDINARY DETALHADO:', err);
 
       throw new BadRequestException(
-        `Erro no processamento da imagem: ${error.message || 'Erro desconhecido'}`,
+        `Erro no processamento da imagem: ${err?.message || 'Erro desconhecido'}`,
       );
     }
   }

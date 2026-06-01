@@ -108,7 +108,7 @@ export class AuthService implements OnModuleInit {
   async getPublicStores() {
     const snapshot = await this.usersCollection.get();
     return snapshot.docs.map((doc) => {
-      const data = doc.data() as DocumentData;
+      const data = doc.data();
       return {
         id: doc.id,
         displayName: data.displayName as string,

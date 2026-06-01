@@ -27,10 +27,15 @@ export class UploadController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     if (!file) throw new BadRequestException('Nenhum arquivo foi enviado');
-    const result = await this.productsService.uploadProductImage(empresaId, produtoId, file);
-    return {
-      message: 'Upload realizado com sucesso',
-      imageUrl: result.image_url,
-    };
+    try {
+      const result = await this.productsService.uploadProductImage(empresaId, produtoId, file);
+      return {
+        message: 'Upload realizado com sucesso',
+        imageUrl: result.imageUrl,
+      };
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      throw new BadRequestException(err?.message || 'Erro no upload');
+    }
   }
 }

@@ -43,7 +43,7 @@ export class OrderItemDto {
 
 export class PagamentoDto {
   @IsString()
-  @IsEnum(['pix', 'cartao', 'boleto'] as any)
+  @IsEnum(['pix', 'cartao', 'boleto'])
   metodo: PagamentoMetodo;
 
   @IsOptional()
@@ -53,7 +53,7 @@ export class PagamentoDto {
 
 export class EntregaDto {
   @IsString()
-  @IsEnum(['retirada', 'entrega'] as any)
+  @IsEnum(['retirada', 'entrega'])
   tipo: EntregaTipo;
 
   @IsOptional()
@@ -74,7 +74,7 @@ export class CreateOrderDto {
   compradorId?: string;
 
   @IsOptional()
-  @IsEnum(['pending', 'paid', 'shipped', 'delivered', 'cancelled'] as any)
+  @IsEnum(['pending', 'paid', 'shipped', 'delivered', 'cancelled'])
   status?: OrderStatus = 'pending';
 
   @Type(() => Number)
@@ -83,10 +83,10 @@ export class CreateOrderDto {
   total: number;
 
   @IsOptional()
-  createdAt?: Date | any;
+  createdAt?: Date;
 
   @IsOptional()
-  updatedAt?: Date | any;
+  updatedAt?: Date;
 
   @IsArray()
   @ArrayMinSize(1)

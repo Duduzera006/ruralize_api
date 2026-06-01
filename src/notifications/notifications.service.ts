@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { FirebaseService } from '../../firebase/firebase.service';
-import { CreateNotificationDto, NotificationType } from './dto/create-notification.dto';
+import { CreateNotificationDto } from './dto/create-notification.dto';
 import { CollectionReference, Firestore } from 'firebase-admin/firestore';
 
 @Injectable()
