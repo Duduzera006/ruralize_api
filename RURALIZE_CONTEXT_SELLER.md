@@ -17,15 +17,17 @@ O **RuralizeSeller** é um aplicativo Android desenvolvido para produtores rurai
 - **Serialização:** GSON.
 
 ## 🏗 Arquitetura
-O app segue um padrão baseado em **Activities**, com uma `BaseDrawerActivity` que centraliza a navegação lateral (Navigation Drawer).
+O app segue um padrão focado em uma `MainActivity` host que gerencia 5 abas principais via **Bottom Navigation** e **Fragments**.
 
 ### Componentes Chave:
-- `Activity.java`: Tela de login e ponto de entrada.
-- `DashboardActivity.java`: Visão geral do negócio com gráficos de vendas e pedidos.
-- `GerenciarProdutosActivity.java` & `NovoProdutoActivity.java`: CRUD completo de produtos.
-- `EstoqueActivity.java`: Gerenciamento focado em níveis de estoque.
-- `VendasActivity.java`: Histórico e resumo de transações (RF13).
-- `EntregasActivity.java`: Gestão logística e atualização de status (RF14).
+- `Activity.java`: Tela de login e ponto de entrada inicial.
+- `MainActivity.java`: Host da navegação inferior (Bottom Navigation).
+- `DashboardFragment.java`: Visão geral do negócio com gráficos de vendas e notificações recentes (RF18).
+- `CatalogFragment.java`: Listagem e gerenciamento de produtos.
+- `SalesFragment.java`: Histórico e resumo de transações (RF13).
+- `DeliveriesFragment.java`: Gestão logística e atualização de status (RF14).
+- `ProfileFragment.java`: Gestão da conta e perfil do vendedor.
+- `NovoProdutoActivity.java`: Formulário completo para CRUD de produtos e variações.
 - `ChatActivity.java`: Interface de chat em tempo real com clientes (RF16).
 
 ### network/RetrofitClient.java & network/services/: Centraliza a comunicação com a API via Retrofit.
@@ -60,6 +62,7 @@ A documentação completa dos endpoints (Swagger) pode ser acessada em: `https:/
 ## 📦 Modelos de Dados (Entidades)
 
 - **Produto:** `id`, `titulo`, `descricao`, `preco`, `estoque`, `categoria`, `fotosUrls`.
+- **Categorias Permitidas:** `Rações e Concentrados`, `Suplementos e Vitaminas`, `Ferraduras e Ferramentas`, `Selaria e Equipamentos`, `Higiene e Cuidados`, `Medicamentos Veterinários`, `Acessórios para Estábulo`, `Outros`.
 - **Venda:** `id`, `cliente`, `valorTotal`, `data`, `status`, `metodoPagamento`, `enderecoEntrega`.
 - **Entrega:** `id`, `endereco`, `prazo`, `status`, `compradorNome`.
 
@@ -84,6 +87,17 @@ A documentação completa dos endpoints (Swagger) pode ser acessada em: `https:/
 - [x] **Central de Notificações:** Implementar a tela que abre ao clicar no ícone de "Sininho". (API Concluída com suporte a gatilhos de estoque e vendas)
 - [ ] **Variações de Produtos:** Adicionar campos para tamanho/peso no formulário de `NovoProdutoActivity`.
 - [x] **Charts Modernos:** Atualizar `MiniBarChartView` e `MiniLineChartView` para o estilo Agro-Modern.
+- [ ] **Validação de Comportamento (BDD):** Documentar cenários de uso do vendedor no padrão Gherkin.
+
+---
+
+## 🧪 Estratégia de Testes BDD (Cucumber)
+Para o **RuralizeSeller**, a estratégia de BDD foca na validação da **Lógica de Negócio Consumida**.
+
+Embora o ecossistema Android tenha suporte ao Cucumber (via `cucumber-android`), para este projeto acadêmico, os testes de comportamento que validam as ações do Vendedor (ex: atualizar estoque, mudar status de entrega) são executados **diretamente na Ruralize API**.
+
+### Vantagem:
+Isso garante que a regra de negócio seja testada uma única vez no núcleo do sistema, protegendo o aplicativo mobile de erros de processamento vindos do servidor.
 
 ---
 

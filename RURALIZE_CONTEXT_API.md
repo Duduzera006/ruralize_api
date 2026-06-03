@@ -88,7 +88,22 @@ O módulo mais crítico para a consistência do ecossistema.
 - [x] **Módulo de Avaliações (Reviews):** Persistência de notas e comentários enviados pelo Shop.
 - [x] **Módulo de Favoritos:** Endpoint para sincronização de produtos salvos pelos compradores.
 - [x] **Endpoint de Lojas Públicas:** Rota `/auth/stores` para filtros do marketplace.
+- [x] **Estratégia de Testes BDD (Cucumber):** Suíte completa implementada com 13 cenários cobrindo Auth, Products, Orders, Deliveries, Reviews e Favorites. (Rode com npm run test:bdd)
 - [ ] **Webhooks de Pagamento:** (Futuro) Preparar integração para confirmação de pagamento.
+
+---
+
+## 🧪 Estratégia de Testes BDD (Cucumber)
+A Ruralize API utiliza **Cucumber.js** para garantir que as regras de negócio sejam respeitadas conforme as especificações.
+
+### Cenários Críticos Mapeados:
+1.  **Criação de Pedido com Sucesso:** Valida se o estoque é baixado corretamente após a compra.
+2.  **Tentativa de Compra sem Estoque:** Garante que a transação falhe e o banco permaneça íntegro.
+3.  **Registro de Empresa com CNPJ:** Valida a obrigatoriedade do CNPJ apenas para o papel de vendedor.
+4.  **Cálculo Automático de Médias:** Garante que o envio de uma nova review atualize a nota do produto.
+
+### Onde os testes residem:
+Os arquivos `.feature` (Gherkin) ficam na pasta `/test/features`, e os `step_definitions` utilizam o **Supertest** para realizar chamadas reais à API em ambiente de teste.
 
 ---
 

@@ -64,7 +64,10 @@ Campos utilizados no frontend:
 ## 4. Funcionalidades e Fluxos Críticos
 
 ### 4.1. Busca e Filtros
-A página inicial implementa uma **Barra de Busca** por nome e um **Filtro por Loja** (nomes reais carregados via `/auth/stores`). A listagem é paginada (10 itens por página).
+A página inicial implementa uma **Barra de Busca** por nome e filtros avançados:
+- **Filtro por Loja:** Carrega nomes reais via `/auth/stores`.
+- **Filtro por Categoria:** Sincronizado com o App Mobile. Categorias permitidas: `Rações e Concentrados`, `Suplementos e Vitaminas`, `Ferraduras e Ferramentas`, `Selaria e Equipamentos`, `Higiene e Cuidados`, `Medicamentos Veterinários`, `Acessórios para Estábulo` e `Outros`.
+A listagem é paginada (12 itens por página) para otimização de layout.
 
 ### 4.2. Sistema de Favoritos (Wishlist)
 Utiliza o `FavoritesProvider` com persistência em **LocalStorage**. Permite ao usuário salvar produtos para visualização posterior na página `/favoritos`. (Implementação de backend futura).
@@ -126,6 +129,17 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
 - [x] **Notificações em Tempo Real (RF15):** Implementado `NotificationProvider` que ouve mudanças no Firestore e exibe Toasts instantâneos.
 - [x] **Chat Integrado (RF16):** Implementada interface de chat em tempo real na página do produto e central de mensagens em `/mensagens`.
 - [x] **Sincronização de Favoritos:** Agora persistido no banco de dados via `/favorites`. (API integrada)
+- [ ] **Testes de Aceitação (Cucumber):** Implementar testes E2E com Playwright para validar a jornada de compra do usuário.
+
+---
+
+## 🧪 Estratégia de Testes BDD (Cucumber)
+O **RuralizeShop** utiliza Cucumber integrado ao **Playwright** para validar as jornadas de usuário (E2E).
+
+### Jornadas Testadas:
+1.  **Busca e Filtro:** "Dado que estou na home, quando busco por 'Ração', então vejo apenas produtos relacionados".
+2.  **Fluxo de Checkout:** "Dado um carrinho com itens, quando finalizo o pagamento, então sou redirecionado para a página de sucesso".
+3.  **Persistência de Favoritos:** Validação se o item salvo aparece na lista após o login.
 
 ---
 
