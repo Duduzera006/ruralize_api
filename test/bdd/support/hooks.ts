@@ -1,5 +1,5 @@
 import { Before, After } from '@cucumber/cucumber';
-import { CustomWorld } from './world.js';
+import type { CustomWorld } from './world.js';
 
 Before(async function (this: CustomWorld) {
   await this.initApp();

@@ -1,14 +1,15 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from 'chai';
 import request from 'supertest';
-import { CustomWorld } from '../support/world.js';
+import type { Response } from 'supertest';
+import type { CustomWorld } from '../support/world.js';
 
 Given('que a API está rodando', function (this: CustomWorld) {
-  expect(this.app).to.not.be.undefined;
+  expect(this.app).to.not.be.equal(undefined);
 });
 
 When('eu faço uma requisição GET para {string}', async function (this: CustomWorld, path: string) {
-  this.lastResponse = await request(this.app.getHttpServer()).get(path);
+  this.lastResponse = (await request(this.server).get(path)) as Response;
 });
 
 Then('o status da resposta deve ser {int}', function (this: CustomWorld, statusCode: number) {
