@@ -1,6 +1,7 @@
-import { Given, When, Then, DataTable } from '@cucumber/cucumber';
+import type { DataTable } from '@cucumber/cucumber';
+import { Given, Then } from '@cucumber/cucumber';
 import { expect } from 'chai';
-import { CustomWorld } from '../support/world.js';
+import type { CustomWorld } from '../support/world.js';
 
 Given('que eu tenho os dados de uma avaliação:', function (this: CustomWorld, data: DataTable) {
   const row = data.rowsHash();
@@ -11,7 +12,8 @@ Given('que eu tenho os dados de uma avaliação:', function (this: CustomWorld, 
 });
 
 Then('a avaliação deve ser salva com sucesso', function (this: CustomWorld) {
-  expect(this.lastResponse.body).to.have.property('id');
+  const body = this.lastResponse.body as Record<string, unknown>;
+  expect(body).to.have.property('id');
 });
 
 Given('que eu tenho os dados para favoritar:', function (this: CustomWorld, data: DataTable) {
@@ -19,5 +21,6 @@ Given('que eu tenho os dados para favoritar:', function (this: CustomWorld, data
 });
 
 Then('a resposta deve confirmar a adição aos favoritos', function (this: CustomWorld) {
-  expect(this.lastResponse.body.success).to.be.true;
+  const body = this.lastResponse.body as Record<string, unknown>;
+  expect(body.success).to.be.equal(true);
 });
