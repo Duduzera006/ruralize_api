@@ -66,7 +66,7 @@ export class OrdersService implements OnModuleInit {
       };
       tx.set(orderRef, orderPayload);
 
-      return { id: orderRef.id, empresaId, ...orderPayload };
+      return { ...orderPayload, empresaId, id: orderRef.id };
     });
 
     // Trigger de Notificações

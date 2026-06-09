@@ -10,12 +10,8 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Criar um ou mais pedidos (Checkout)' })
-  create(@Body() dto: CreateOrderDto | CreateOrderDto[]) {
-    if (Array.isArray(dto)) {
-      return this.ordersService.createMany(dto);
-    }
-
+  @ApiOperation({ summary: 'Criar um pedido (Checkout)' })
+  create(@Body() dto: CreateOrderDto) {
     return this.ordersService.create(dto);
   }
 

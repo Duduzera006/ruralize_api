@@ -77,8 +77,8 @@ export class CustomWorld extends World {
       deleteUser: () => Promise.resolve(),
     };
 
-    const mockDoc = (id: string = 'mock-id', data: Record<string, unknown> = {}): IMockDoc => ({
-      id,
+    const mockDoc = (id?: string, data: Record<string, unknown> = {}): IMockDoc => ({
+      id: id || 'mock-id',
       set: () => Promise.resolve(),
       get: () =>
         Promise.resolve({

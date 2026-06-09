@@ -24,6 +24,9 @@ When(
         {
           productId: row.productId,
           quantidade: parseInt(row.quantidade),
+          titulo: 'Sela de Couro',
+          precoUnitario: 250,
+          subtotal: parseFloat(row.total),
         },
       ],
       pagamento: { metodo: 'pix' },
