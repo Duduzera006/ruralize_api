@@ -87,6 +87,7 @@ O módulo mais crítico para a consistência do ecossistema.
 - [x] **Documentação Swagger:** Implementar `@nestjs/swagger`. (Acesse em /api)
 - [x] **Módulo de Avaliações (Reviews):** Persistência de notas e comentários enviados pelo Shop.
 - [x] **Módulo de Favoritos:** Endpoint para sincronização de produtos salvos pelos compradores.
+- [x] **Ajuste de Validação (Products):** Remover validação de array mínimo (`@ArrayMinSize(1)`) do campo `fotos` no `CreateProductDto`, pois o App Mobile envia as fotos em um endpoint separado logo após a criação.
 - [x] **Endpoint de Lojas Públicas:** Rota `/auth/stores` para filtros do marketplace.
 - [x] **Estratégia de Testes BDD (Cucumber):** Suíte completa implementada com 13 cenários cobrindo Auth, Products, Orders, Deliveries, Reviews e Favorites. (Rode com npm run test:bdd)
 - [ ] **Webhooks de Pagamento:** (Futuro) Preparar integração para confirmação de pagamento.

@@ -5,7 +5,6 @@ import {
   IsString,
   MaxLength,
   Min,
-  ArrayMinSize,
   ArrayMaxSize,
 } from 'class-validator';
 
@@ -19,7 +18,6 @@ export class CreateProductDto {
   descricao?: string;
 
   @IsArray()
-  @ArrayMinSize(1)
   @ArrayMaxSize(5)
   @IsString({ each: true })
   @IsOptional()
